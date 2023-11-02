@@ -29,10 +29,10 @@ func Get() *Config {
 	onceConfig.Do(func() {
 		var err error
 		if err = godotenv.Load(cfgPath); err != nil {
-			logger.Error.Fatal(err)
+			logger.Error.Fatalf("Get(): godotenv.Load(cfgPath) failed - %v", err)
 		}
 		if err = env.Unmarshal(config); err != nil {
-			logger.Error.Fatal(err)
+			logger.Error.Fatalf("Get(): env.Unmarshal(config) failed - %v", err)
 		}
 	})
 	return config
