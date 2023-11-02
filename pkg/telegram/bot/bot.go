@@ -3,6 +3,7 @@ package bot
 import (
 	"github.com/Li-Khan/go-nasa-bot/pkg/logger"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"sync"
 )
 
 type Bot struct {
@@ -10,19 +11,33 @@ type Bot struct {
 	Updates tgbotapi.UpdatesChannel
 }
 
-func NewBot(token string) (*Bot, error) {
-	bot, err := tgbotapi.NewBotAPI(token)
-	if err != nil {
-		return nil, err
-	}
-	//bot.Debug = true
-	logger.Info.Printf("Authorized on account %s", bot.Self.UserName)
-	u := tgbotapi.NewUpdate(0)
-	u.Timeout = 60
+var (
+	bot     *Bot
+	botOnce = &sync.Once{}
+)
 
-	updates := bot.GetUpdatesChan(u)
-	return &Bot{
-		BotAPI:  bot,
-		Updates: updates,
-	}, nil
+func Init(token string) {
+	botOnce.Do(func() {
+		b, err := tgbotapi.NewBotAPI(token)
+		if err != nil {
+			logger.Error.Fatalf("NewBot(): tgbotapi.NewBotAPI(token) failed - %v", err)
+		}
+		//bot.Debug = true
+		logger.Info.Printf("Authorized on account %s", b.Self.UserName)
+		u := tgbotapi.NewUpdate(0)
+		u.Timeout = 60
+
+		updates := b.GetUpdatesChan(u)
+		bot = &Bot{
+			BotAPI:  b,
+			Updates: updates,
+		}
+	})
+}
+
+func Get() *Bot {
+	if bot == nil {
+		logger.Error.Fatal("Get(): bot is nil")
+	}
+	return bot
 }

@@ -18,6 +18,6 @@ func (r *Response) UnmarshalJSON(v any) error {
 	return json.Unmarshal(b, v)
 }
 
-func (r *Response) Close() error {
-	return r.resp.Body.Close()
+func (r *Response) Close() {
+	_ = r.resp.Body.Close()
 }
