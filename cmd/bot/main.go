@@ -13,7 +13,7 @@ import (
 )
 
 func init() {
-	logger.Init("configBot")
+	logger.Init("Bot")
 	cfg := configBot.Get()
 	bot.Init(cfg.Telegram.BotToken)
 }

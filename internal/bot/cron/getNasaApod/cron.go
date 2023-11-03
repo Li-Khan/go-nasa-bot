@@ -2,15 +2,13 @@ package getNasaApod
 
 import (
 	"context"
-	"fmt"
 	configBot "github.com/Li-Khan/go-nasa-bot/config/bot"
 	"github.com/Li-Khan/go-nasa-bot/internal/bot/entity"
 	"github.com/Li-Khan/go-nasa-bot/internal/bot/handler/sendApod"
+	"github.com/Li-Khan/go-nasa-bot/pkg/file"
 	"github.com/Li-Khan/go-nasa-bot/pkg/logger"
 	goHttp "github.com/Li-Khan/go-nasa-bot/pkg/service/http"
-	"io/ioutil"
 	"net/http"
-	"os"
 	"time"
 )
 
@@ -25,8 +23,8 @@ func Cron() {
 	request.SetQueryParam("api_key", cfg.APIToken)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
 	response, err := request.Do(ctx)
-	cancel()
 	if err != nil {
 		logger.Error.Printf("Cron(): request.Do(ctx) failed - %v", err)
 		return
@@ -38,17 +36,9 @@ func Cron() {
 		logger.Error.Printf("Cron(): response.UnmarshalJSON(&apod) failed - %v", err)
 		return
 	}
-	file, err := ioutil.ReadFile("./last_date.txt")
-	if err != nil {
-		fmt.Println(err)
-	}
-	if string(file) == apod.Date {
-		return
-	}
-	write1, _ := os.Create("./last_date.txt")
-	_, err = write1.Write([]byte(apod.Date))
-	if err != nil {
-		logger.Error.Printf("Cron(): write1.Write([]byte(apod.Date)) failed - %v", err)
+
+	lastDate, err := file.OpenAndOverwriteFile("./last_date.txt", apod.Date)
+	if lastDate == apod.Date {
 		return
 	}
 
