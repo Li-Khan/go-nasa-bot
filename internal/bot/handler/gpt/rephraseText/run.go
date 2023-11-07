@@ -7,18 +7,24 @@ import (
 	"net/http"
 )
 
+// RunRequest represents the structure of the request to start the Copy.ai workflow.
+// It includes start variables and metadata.
 type RunRequest struct {
 	RunStartVariables `json:"startVariables"`
 	RunMetadata       `json:"metadata"`
 }
 
+// RunStartVariables holds the original text for rephrasing.
 type RunStartVariables struct {
 	OriginalText string `json:"original_text"`
 }
+
+// RunMetadata contains metadata for the Copy.ai API request.
 type RunMetadata struct {
 	API bool `json:"api"`
 }
 
+// RunResponse holds the response data after initiating the workflow.
 type RunResponse struct {
 	Status string `json:"status"`
 	Data   struct {
@@ -26,6 +32,8 @@ type RunResponse struct {
 	} `json:"data"`
 }
 
+// run sends a request to Copy.ai API to initiate the rephrasing process.
+// It returns the ID associated with the workflow run.
 func run(cfg *configBot.Config, text string) (string, error) {
 	request := RunRequest{
 		RunStartVariables: RunStartVariables{

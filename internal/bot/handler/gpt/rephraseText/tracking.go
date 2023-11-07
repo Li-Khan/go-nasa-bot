@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// TrackingResponse represents the structure of the response received while tracking the workflow progress.
 type TrackingResponse struct {
 	Status string `json:"status"`
 	Data   struct {
@@ -31,6 +32,7 @@ type TrackingResponse struct {
 	} `json:"data"`
 }
 
+// tracking checks the status of the Copy.ai workflow and retrieves the rephrased text.
 func tracking(cfg *configBot.Config, id string) (string, error) {
 	client := goHttp.NewClient()
 	requestHttp, err := client.Request(http.MethodGet, fmt.Sprintf(url+"/%s", cfg.CopyAI.WorkflowID, id))

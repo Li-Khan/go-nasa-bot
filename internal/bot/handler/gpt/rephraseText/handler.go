@@ -7,6 +7,8 @@ import (
 
 const url string = "https://api.copy.ai/api/workflow/%s/run"
 
+// Handle processes the provided text using Copy.ai API to rephrase it.
+// It initiates the workflow, monitors its progress, and returns the rephrased text.
 func Handle(text string) (string, error) {
 	conf := configBot.Get()
 	id, err := run(conf, text)
