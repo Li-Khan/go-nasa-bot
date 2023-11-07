@@ -10,6 +10,8 @@ import (
 	"net/http"
 )
 
+// Cron is a scheduled task that fetches the Astronomy Picture of the Day (APOD)
+// from NASA's API and sends it to a Telegram channel.
 func Cron() {
 	cfg := configBot.Get().Nasa
 	client := goHttp.NewClient()

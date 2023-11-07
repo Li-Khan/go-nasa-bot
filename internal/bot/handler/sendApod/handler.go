@@ -19,6 +19,8 @@ const msgFormat string = `<b>%s</b>
 %s: %s
 Дата: %s`
 
+// Handle processes the Astronomy Picture of the Day (APOD) and sends it to a Telegram channel.
+// It translates the title to Russian, rephrases the explanation, and sends either a photo or video message based on the media type.
 func Handle(apod *entity.Apod) error {
 	apod.Title = strings.TrimSpace(apod.Title)
 	apod.Explanation = strings.TrimSpace(apod.Explanation)
