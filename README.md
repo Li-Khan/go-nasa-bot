@@ -19,6 +19,9 @@ This Telegram bot is written in Go and serves the purpose of fetching the Astron
 3. **Bot Behavior**
     - The bot will periodically fetch the APOD and rephrase text. It will then send this information to a designated Telegram channel.
 
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
+
+[![Go Report Card](https://goreportcard.com/badge/github.com/Li-Khan/go-nasa-bot)](https://goreportcard.com/report/github.com/Li-Khan/go-nasa-bot)
