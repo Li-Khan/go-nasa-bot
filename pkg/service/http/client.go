@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"encoding/xml"
+	"io"
 	"net/http"
 	netUrl "net/url"
 )
@@ -23,33 +24,27 @@ func (c *Client) SetHttpClient(client *http.Client) {
 }
 
 func (c *Client) Request(method string, url string) (*Request, error) {
-	req, err := http.NewRequest(method, url, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &Request{
-		req:    req,
-		client: c.httpClient,
-		vals:   make(netUrl.Values),
-	}, nil
+	return c.request(method, url, nil)
 }
 
 func (c *Client) RequestJSON(method string, url string, payload any) (*Request, error) {
 	b, err := json.Marshal(payload)
-	req, err := http.NewRequest(method, url, bytes.NewBuffer(b))
 	if err != nil {
 		return nil, err
 	}
-	return &Request{
-		req:    req,
-		client: c.httpClient,
-		vals:   make(netUrl.Values),
-	}, nil
+	return c.request(method, url, bytes.NewBuffer(b))
 }
 
 func (c *Client) RequestXML(method string, url string, payload any) (*Request, error) {
 	b, err := xml.Marshal(payload)
-	req, err := http.NewRequest(method, url, bytes.NewBuffer(b))
+	if err != nil {
+		return nil, err
+	}
+	return c.request(method, url, bytes.NewBuffer(b))
+}
+
+func (c *Client) request(method string, url string, body io.Reader) (*Request, error) {
+	req, err := http.NewRequest(method, url, body)
 	if err != nil {
 		return nil, err
 	}
