@@ -1,7 +1,6 @@
 package getNasaApod
 
 import (
-	"context"
 	configBot "github.com/Li-Khan/go-nasa-bot/config/bot"
 	"github.com/Li-Khan/go-nasa-bot/internal/bot/entity"
 	"github.com/Li-Khan/go-nasa-bot/internal/bot/handler/sendApod"
@@ -9,7 +8,6 @@ import (
 	"github.com/Li-Khan/go-nasa-bot/pkg/logger"
 	goHttp "github.com/Li-Khan/go-nasa-bot/pkg/service/http"
 	"net/http"
-	"time"
 )
 
 func Cron() {
@@ -20,13 +18,11 @@ func Cron() {
 		logger.Error.Printf("Cron(): client.Request(http.MethodGet, cfg.Nasa.ApodURL) failed - %v", err)
 		return
 	}
-	request.SetQueryParam("api_key", cfg.APIToken)
+	request.SetQueryParam("api_key", cfg.APIKey)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	defer cancel()
-	response, err := request.Do(ctx)
+	response, err := request.DoWithTimeout(30)
 	if err != nil {
-		logger.Error.Printf("Cron(): request.Do(ctx) failed - %v", err)
+		logger.Error.Printf("Cron(): request.DoWithTimeout(ctx) failed - %v", err)
 		return
 	}
 	defer response.Close()

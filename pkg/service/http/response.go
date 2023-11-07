@@ -18,6 +18,10 @@ func (r *Response) UnmarshalJSON(v any) error {
 	return json.Unmarshal(b, v)
 }
 
+func (r *Response) GetStatusCode() int {
+	return r.resp.StatusCode
+}
+
 func (r *Response) Close() {
 	_ = r.resp.Body.Close()
 }

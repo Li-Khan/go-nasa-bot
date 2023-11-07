@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"time"
 )
 
 type Request struct {
@@ -12,7 +13,21 @@ type Request struct {
 	client *http.Client
 }
 
-func (r *Request) Do(ctx context.Context) (*Response, error) {
+func (r *Request) Do() (*Response, error) {
+	return r.do(context.Background())
+}
+
+func (r *Request) DoWithContext(ctx context.Context) (*Response, error) {
+	return r.do(ctx)
+}
+
+func (r *Request) DoWithTimeout(sec int) (*Response, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(sec)*time.Second)
+	defer cancel()
+	return r.do(ctx)
+}
+
+func (r *Request) do(ctx context.Context) (*Response, error) {
 	r.req.URL.RawQuery = r.vals.Encode()
 	resp, err := r.client.Do(r.req.WithContext(ctx))
 	if err != nil {
@@ -28,7 +43,17 @@ func (r *Request) SetQueryParam(key string, value string) *Request {
 	return r
 }
 
+func (r *Request) SetHeader(key string, value string) *Request {
+	r.req.Header.Set(key, value)
+	return r
+}
+
 func (r *Request) AddQueryParam(key string, value string) *Request {
 	r.vals.Add(key, value)
+	return r
+}
+
+func (r *Request) AddHeader(key string, value string) *Request {
+	r.req.Header.Add(key, value)
 	return r
 }

@@ -20,8 +20,12 @@ type Config struct {
 		ChatID   int64  `env:"TELEGRAM_CHAT_ID"`
 	}
 	Nasa struct {
-		APIToken string `env:"NASA_API_TOKEN"`
-		ApodURL  string `env:"NASA_APOD_URL"`
+		APIKey  string `env:"NASA_API_KEY"`
+		ApodURL string `env:"NASA_APOD_URL"`
+	}
+	CopyAI struct {
+		APIKey     string `env:"COPY_AI_API_KEY"`
+		WorkflowID string `env:"COPY_AI_WORKFLOW_ID"`
 	}
 }
 

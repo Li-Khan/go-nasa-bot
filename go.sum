@@ -4,6 +4,10 @@ github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1 h1:wG8n/XJQ07TmjbITcGi
 github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1/go.mod h1:A2S0CWkNylc2phvKXWBBdD3K0iGnDBGbzRpISP2zBl8=
 github.com/joho/godotenv v1.5.1 h1:7eLL/+HRGLY0ldzfGMeQkb7vMd0as4CfYvUVzLqw0N0=
 github.com/joho/godotenv v1.5.1/go.mod h1:f4LDr5Voq0i2e/R5DDNOoa2zzDfwtkZa6DnEwAbqwq4=
+github.com/kkdai/youtube-dl v0.0.0-20151214033123-57c1d6a3235f h1:Od30TzcaTskmgg0AKPvjRH8gmsknPJNXMEXjwXQnQOs=
+github.com/kkdai/youtube-dl v0.0.0-20151214033123-57c1d6a3235f/go.mod h1:rHs6zwwXI0C9MzFiS0yfZ1cNtp6oVyqMR3kIOwFTn3M=
+github.com/lepidosteus/youtube-dl v0.0.0-20160531093931-748b554fc850 h1:sPIXqWylvzV4I1+7zFlznjpV6bGOyytzWeGkEWOYRQ8=
+github.com/lepidosteus/youtube-dl v0.0.0-20160531093931-748b554fc850/go.mod h1:sbAP8XAXL7gdmXJrv5Tpw32XRc76MdYbzx+x4qFqpLY=
 github.com/robertkrimen/otto v0.2.1 h1:FVP0PJ0AHIjC+N4pKCG9yCDz6LHNPCwi/GKID5pGGF0=
 github.com/robertkrimen/otto v0.2.1/go.mod h1:UPwtJ1Xu7JrLcZjNWN8orJaM5n5YEtqL//farB5FlRY=
 golang.org/x/text v0.4.0 h1:BrVqGRd7+k1DiOgtnFvAkoQEWQvBc25ouMJM6429SFg=
