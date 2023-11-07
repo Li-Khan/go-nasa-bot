@@ -1,13 +1,14 @@
 package getNasaApod
 
 import (
+	"net/http"
+
 	configBot "github.com/Li-Khan/go-nasa-bot/config/bot"
 	"github.com/Li-Khan/go-nasa-bot/internal/bot/entity"
 	"github.com/Li-Khan/go-nasa-bot/internal/bot/handler/sendApod"
 	"github.com/Li-Khan/go-nasa-bot/pkg/file"
 	"github.com/Li-Khan/go-nasa-bot/pkg/logger"
 	goHttp "github.com/Li-Khan/go-nasa-bot/pkg/service/http"
-	"net/http"
 )
 
 // Cron is a scheduled task that fetches the Astronomy Picture of the Day (APOD)
@@ -36,6 +37,10 @@ func Cron() {
 	}
 
 	lastDate, err := file.OpenAndOverwriteFile("./last_date.txt", apod.Date)
+	if err != nil {
+		logger.Error.Printf("Cron(): file.OpenAndOverwriteFile('./last_date.txt', apod.Date) failed - %v", err)
+		return
+	}
 	if lastDate == apod.Date {
 		return
 	}
