@@ -1,10 +1,12 @@
 package rephraseText
 
 import (
+	"context"
 	"fmt"
 	configBot "github.com/Li-Khan/go-nasa-bot/config/bot"
 	goHttp "github.com/Li-Khan/go-nasa-bot/pkg/service/http"
 	"net/http"
+	"time"
 )
 
 // RunRequest represents the structure of the request to start the Copy.ai workflow.
@@ -52,7 +54,9 @@ func run(cfg *configBot.Config, text string) (string, error) {
 	requestHttp.AddHeader("Content-Type", "application/json")
 	requestHttp.AddHeader("x-copy-ai-api-key", cfg.CopyAI.APIKey)
 
-	responseHttp, err := requestHttp.DoWithTimeout(30)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+	responseHttp, err := requestHttp.DoWithContext(ctx)
 	if err != nil {
 		return "", err
 	}

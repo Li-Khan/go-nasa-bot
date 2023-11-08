@@ -16,8 +16,7 @@ const msgFormat string = `<b>%s</b>
 %s
 
 Автор: %s
-%s: %s
-Дата: %s`
+%s: %s`
 
 // Handle processes the Astronomy Picture of the Day (APOD) and sends it to a Telegram channel.
 // It translates the title to Russian, rephrases the explanation, and sends either a photo or video message based on the media type.
@@ -51,10 +50,10 @@ func Handle(apod *entity.Apod) error {
 }
 
 func sendPhoto(apod *entity.Apod) error {
-	text := fmt.Sprintf(msgFormat, apod.Title, apod.Explanation, apod.Copyright, "Фото", apod.Hdurl, apod.Date)
+	text := fmt.Sprintf(msgFormat, apod.Title, apod.Explanation, apod.Copyright, "Фото", apod.URL)
 	cfg := configBot.Get().Telegram
-	photo := tgbotapi.NewPhoto(cfg.ChatID, tgbotapi.FileURL(apod.Hdurl))
-	photo.Caption = text
+	photo := tgbotapi.NewPhoto(cfg.ChatID, tgbotapi.FileURL(apod.URL))
+	photo.Caption = strings.TrimSpace(text)
 	photo.ParseMode = "HTML"
 	bot := goBot.Get()
 	_, err := bot.Send(photo)
@@ -63,9 +62,9 @@ func sendPhoto(apod *entity.Apod) error {
 
 func sendVideo(apod *entity.Apod) error {
 	// TODO download and send video
-	text := fmt.Sprintf(msgFormat, apod.Title, apod.Explanation, apod.Copyright, "Видео", apod.URL, apod.Date)
+	text := fmt.Sprintf(msgFormat, apod.Title, apod.Explanation, apod.Copyright, "Видео", apod.URL)
 	cfg := configBot.Get().Telegram
-	video := tgbotapi.NewMessage(cfg.ChatID, text)
+	video := tgbotapi.NewMessage(cfg.ChatID, strings.TrimSpace(text))
 	video.ParseMode = "HTML"
 	bot := goBot.Get()
 	_, err := bot.Send(video)

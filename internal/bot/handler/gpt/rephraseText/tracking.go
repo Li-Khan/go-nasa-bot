@@ -1,6 +1,7 @@
 package rephraseText
 
 import (
+	"context"
 	"fmt"
 	configBot "github.com/Li-Khan/go-nasa-bot/config/bot"
 	goHttp "github.com/Li-Khan/go-nasa-bot/pkg/service/http"
@@ -41,7 +42,9 @@ func tracking(cfg *configBot.Config, id string) (string, error) {
 	}
 	requestHttp.AddHeader("x-copy-ai-api-key", cfg.CopyAI.APIKey)
 
-	responseHttp, err := requestHttp.DoWithTimeout(30)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+	responseHttp, err := requestHttp.DoWithContext(ctx)
 	if err != nil {
 		return "", err
 	}

@@ -1,7 +1,9 @@
 package getNasaApod
 
 import (
+	"context"
 	"net/http"
+	"time"
 
 	configBot "github.com/Li-Khan/go-nasa-bot/config/bot"
 	"github.com/Li-Khan/go-nasa-bot/internal/bot/entity"
@@ -23,7 +25,9 @@ func Cron() {
 	}
 	request.SetQueryParam("api_key", cfg.APIKey)
 
-	response, err := request.DoWithTimeout(30)
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	response, err := request.DoWithContext(ctx)
 	if err != nil {
 		logger.Error.Printf("Cron(): request.DoWithTimeout(ctx) failed - %v", err)
 		return

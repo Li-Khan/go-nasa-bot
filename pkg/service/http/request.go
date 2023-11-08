@@ -4,7 +4,6 @@ import (
 	"context"
 	"net/http"
 	"net/url"
-	"time"
 )
 
 type Request struct {
@@ -18,12 +17,6 @@ func (r *Request) Do() (*Response, error) {
 }
 
 func (r *Request) DoWithContext(ctx context.Context) (*Response, error) {
-	return r.do(ctx)
-}
-
-func (r *Request) DoWithTimeout(sec int) (*Response, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(sec)*time.Second)
-	defer cancel()
 	return r.do(ctx)
 }
 
