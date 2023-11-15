@@ -18,6 +18,14 @@ func (r *Response) UnmarshalJSON(v any) error {
 	return json.Unmarshal(b, v)
 }
 
+func (r *Response) GetBody() []byte {
+	b, err := ioutil.ReadAll(r.resp.Body)
+	if err != nil {
+		return nil
+	}
+	return b
+}
+
 func (r *Response) GetStatusCode() int {
 	return r.resp.StatusCode
 }

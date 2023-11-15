@@ -18,6 +18,7 @@ type Config struct {
 	Telegram struct {
 		BotToken string `env:"TELEGRAM_BOT_TOKEN"`
 		ChatID   int64  `env:"TELEGRAM_CHAT_ID"`
+		AdminID  int64  `env:"TELEGRAM_ADMIN_ID"`
 	}
 	Nasa struct {
 		APIKey  string `env:"NASA_API_KEY"`
