@@ -22,7 +22,6 @@ func Init(token string) {
 		if err != nil {
 			logger.Error.Fatalf("NewBot(): tgbotapi.NewBotAPI(token) failed - %v", err)
 		}
-		//bot.Debug = true
 		logger.Info.Printf("Authorized on account %s", b.Self.UserName)
 		u := tgbotapi.NewUpdate(0)
 		u.Timeout = 60

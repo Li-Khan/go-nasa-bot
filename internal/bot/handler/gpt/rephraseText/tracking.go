@@ -54,5 +54,12 @@ func tracking(cfg *configBot.Config, id string) (string, error) {
 	if err = responseHttp.UnmarshalJSON(&response); err != nil {
 		return "", err
 	}
+	t := "translation:"
+	for i := 0; i < len(response.Data.Output.SummarizeText)-len(t); i++ {
+		if response.Data.Output.SummarizeText[i:i+len(t)] == t {
+			response.Data.Output.SummarizeText = response.Data.Output.SummarizeText[i+len(t):]
+			break
+		}
+	}
 	return response.Data.Output.SummarizeText, nil
 }

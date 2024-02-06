@@ -51,7 +51,6 @@ func run(cfg *configBot.Config, text string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	requestHttp.AddHeader("Content-Type", "application/json")
 	requestHttp.AddHeader("x-copy-ai-api-key", cfg.CopyAI.APIKey)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
@@ -66,7 +65,6 @@ func run(cfg *configBot.Config, text string) (string, error) {
 	if err = responseHttp.UnmarshalJSON(&response); err != nil {
 		return "", err
 	}
-
 	if response.Status != "success" {
 		return "", fmt.Errorf("request failed. status returned: %s", response.Status)
 	}

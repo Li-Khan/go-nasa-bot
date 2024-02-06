@@ -12,7 +12,7 @@ func Handle(format string, v ...any) {
 	text := fmt.Sprintf(format, v...)
 	logger.Error.Println(text)
 	cfg := configBot.Get().Telegram
-	msg := tgbotapi.NewMessage(cfg.AdminID, text)
+	msg := tgbotapi.NewMessage(cfg.AdminID, "Error: "+text)
 	bot := goBot.Get()
 	_, err := bot.Send(msg)
 	if err != nil {

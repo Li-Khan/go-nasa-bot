@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/Li-Khan/go-nasa-bot/internal/bot/handler/telegram/sendAdminErrorMessage"
 	"net/http"
+	"os"
 	"time"
 
 	configBot "github.com/Li-Khan/go-nasa-bot/config/bot"
@@ -64,6 +65,9 @@ func Cron() {
 
 	if err = sendApod.Handle(apod); err != nil {
 		sendAdminErrorMessage.Handle("Cron(): sendApod.Handle(apod) failed - %v", err)
+		if err = os.Remove("./last_date.txt"); err != nil {
+			sendAdminErrorMessage.Handle("Cron(): os.Remove(\"./last_date.txt\") failed - %v", err)
+		}
 		return
 	}
 }

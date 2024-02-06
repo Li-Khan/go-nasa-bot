@@ -36,7 +36,7 @@ func (c *Client) RequestJSON(method string, url string, payload any) (*Request, 
 	if err != nil {
 		return nil, err
 	}
-	r.SetHeader("Content-Type", "application/json; charset=UTF-8")
+	r.AddHeader("Content-Type", "application/json; charset=UTF-8")
 	return r, nil
 }
 
@@ -49,7 +49,7 @@ func (c *Client) RequestXML(method string, url string, payload any) (*Request, e
 	if err != nil {
 		return nil, err
 	}
-	r.SetHeader("Content-Type", "text/html; charset=UTF-8")
+	r.AddHeader("Content-Type", "text/html; charset=UTF-8")
 	return r, nil
 }
 

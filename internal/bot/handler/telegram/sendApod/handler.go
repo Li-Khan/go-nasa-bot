@@ -7,17 +7,16 @@ import (
 	"github.com/Li-Khan/go-nasa-bot/internal/bot/handler/gpt/rephraseText"
 	"github.com/Li-Khan/go-nasa-bot/internal/bot/handler/youtube/downloadVideo"
 	goBot "github.com/Li-Khan/go-nasa-bot/pkg/telegram/bot"
-	translategooglefree "github.com/bas24/googletranslatefree"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"os"
 	"strings"
 )
 
-const msgFormat string = `<b>%s</b>
+var msgFormat = `<b>%s</b>
 
 %s
 
-Автор: %s
+Copyright: %s
 %s: %s`
 
 // Handle processes the Astronomy Picture of the Day (APOD) and sends it to a Telegram channel.
@@ -27,10 +26,6 @@ func Handle(apod *entity.Apod) error {
 		apod.Copyright = "NASA"
 	}
 	var err error
-	apod.Title, err = translategooglefree.Translate(apod.Title, "en", "ru")
-	if err != nil {
-		return err
-	}
 	apod.Explanation, err = rephraseText.Handle(apod.Explanation)
 	if err != nil {
 		return err
@@ -47,7 +42,11 @@ func Handle(apod *entity.Apod) error {
 }
 
 func sendPhoto(apod *entity.Apod) error {
-	text := fmt.Sprintf(msgFormat, apod.Title, apod.Explanation, apod.Copyright, "Фото", apod.URL)
+	photoUrl := apod.URL
+	if apod.Hdurl != "" {
+		photoUrl = apod.Hdurl
+	}
+	text := fmt.Sprintf(msgFormat, apod.Title, apod.Explanation, apod.Copyright, "Photo", photoUrl)
 	cfg := configBot.Get().Telegram
 	photo := tgbotapi.NewPhoto(cfg.ChatID, tgbotapi.FileURL(apod.URL))
 	photo.Caption = strings.TrimSpace(text)
@@ -61,7 +60,7 @@ func sendVideo(apod *entity.Apod) error {
 	if err := downloadVideo.Handle(apod.URL); err != nil {
 		return err
 	}
-	text := fmt.Sprintf(msgFormat, apod.Title, apod.Explanation, apod.Copyright, "Видео", apod.URL)
+	text := fmt.Sprintf(msgFormat, apod.Title, apod.Explanation, apod.Copyright, "Video", apod.URL)
 	cfg := configBot.Get().Telegram
 	video := tgbotapi.NewVideo(cfg.ChatID, tgbotapi.FilePath("./video.mp4"))
 	video.ParseMode = "HTML"
